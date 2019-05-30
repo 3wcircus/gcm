@@ -1,3 +1,15 @@
 from django.db import models
 
-# Create your models here.
+
+# Model for the Students and Projects
+class StudentProject(models.Model):
+    project_student_name = models.CharField(max_length=200)
+    project_name = models.CharField(max_length=200)
+    project_url =  models.CharField(max_length=500)
+    project_last_checked = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Student Projects"
+
+    def __str__(self):
+        return (self.project_student_name + " : " + self.project_name)

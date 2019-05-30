@@ -1,0 +1,24 @@
+{% extends "gcm_app/base.html" %}
+
+{% block title %} Commit History {% endblock %}
+
+{% block content %}
+
+
+    {% for com in commit_history %}
+        <h3>{{ com.commit.author.name }}</h3>
+        <p>{{ com.commit.author.date }}</p>
+        <a target="_blank" href="{{ com.html_url }}">
+            {{ com.commit.message }}
+        </a>
+
+{#        <h4>{{ com.commit.message }}</h4>#}
+
+{#        <p>{{ com.commit.author.email }}</p>#}
+
+
+        <hr/>
+    {% endfor %}
+
+
+{% endblock content %}
