@@ -5,16 +5,23 @@
     <title>
         {% block title %} Home {% endblock title %}
     </title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             crossorigin="anonymous"></script>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'gsm_app/css/base.css' %}"/>
+    <link rel="stylesheet" href="{% static 'gcm_app/css/base.css' %}"/>
 </head>
 <body>
-<!--<div class="container">-->
+<script type="application/javascript">
+    function search_option(opt) {
+        console.log(opt.value);
+    }
+</script>
 <div class="wrapper">
     <!----------------------------------------------------------------------->
     <!--Define Header-->
@@ -30,24 +37,24 @@
         <!----------------------------------------------------------------------->
         <!--Define main Navigation -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <!--<a class="navbar-brand" href="#">Django Blog</a>-->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'test' %}">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'test' %}">New</a>
+                    <li class="navbar-right">
+                        <form role="form">
+                            <label class="radio-inline"><input type="radio" name="gr" value="0"
+                                                               onchange="search_option(this)" checked>Student</label>
+                            <label class="radio-inline"><input type="radio" name="gr" value="1"
+                                                               onchange="search_option(this)">Project</label>
+                        </form>
                     </li>
                 </ul>
-
             </div>
             <div class="form-group pull_right">
-                <input type="text" class="navbar-right form-control" placeholder="Projects">
+                <input type="text" class="navbar-right form-control" placeholder="search term">
             </div>
             <button type="submit" class="btn btn-default">Search</button>
         </nav>
@@ -70,5 +77,6 @@
         This application is in development
         {% endblock footer %}
     </div>
+</div>
 </body>
 </html>

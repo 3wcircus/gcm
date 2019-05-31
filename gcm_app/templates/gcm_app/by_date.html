@@ -1,0 +1,24 @@
+{% extends "gcm_app/base.html" %}
+{% load cs_custom %}
+{% block title %} Commit History {% endblock %}
+
+{% block content %}
+
+{% set last_student = "" %}
+{% for com in commit_history %}
+    {% if last_student != com.commit.author.name %}
+        <h3>{{ com.commit.author.name }}</h3>
+        {% set last_student = com.commit.author.name %}
+    {% endif %}
+<p>{{ com.url | regex1:"(?:https://api.github.com/repos/)(.*)(?:/commits)"}}</p>
+<p>{{ com.commit.author.date }}</p>
+<a target="_blank" href="{{ com.html_url }}">
+    {{ com.commit.message }}
+</a>
+
+
+<hr/>
+{% endfor %}
+
+
+{% endblock content %}
