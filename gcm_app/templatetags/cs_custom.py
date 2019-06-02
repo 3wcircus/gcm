@@ -3,9 +3,11 @@ import re
 from django import template
 from django.template.defaultfilters import stringfilter
 
+# A few custom filters for use in templates
 register = template.Library()
 
 
+# Part of support for using variables in templates
 class SetVarNode(template.Node):
 
     def __init__(self, var_name, var_value):
@@ -22,6 +24,7 @@ class SetVarNode(template.Node):
         return u""
 
 
+# Quick and dirty custom template that supports defining/using variables in the Django templates
 @register.tag(name='set')
 def set_var(parser, token):
     """
@@ -34,6 +37,8 @@ def set_var(parser, token):
     return SetVarNode(parts[1], parts[3])
 
 
+# Quick and dirty custom filter that will let u execute a regular expression from Django template
+# TODO: Enhance this so you can get back more than one capturing group
 @register.filter
 @stringfilter
 def regex1(value, exp):
