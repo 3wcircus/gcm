@@ -6,14 +6,14 @@
 
 {% set last_student = "" %}
 {% for com in commit_history %}
-    {% if last_student != com.commit.author.name %}
-        <h3>{{ com.commit.author.name }}</h3>
-        {% set last_student = com.commit.author.name %}
+    {% if last_student != com.commit_user %}
+        <h3>{{ com.commit_user }}</h3>
+        {% set last_student = com.commit_user %}
     {% endif %}
-<p>{{ com.url | regex1:"(?:https://api.github.com/repos/)(.*)(?:/commits)"}}</p>
-<p>{{ com.commit.author.date }}</p>
-<a target="_blank" href="{{ com.html_url }}">
-    {{ com.commit.message }}
+<p>{{ com.commit_url | regex1:"(?:https://api.github.com/repos/)(.*)(?:/commits)"}}</p>
+<p>{{ com.commit_date }}</p>
+<a target="_blank" href="{{ com.commit_url }}">
+    {{ com.commit_msg }}
 </a>
 
 

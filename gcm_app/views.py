@@ -5,8 +5,13 @@ from datetime import datetime
 from typing import List, Any
 
 import requests
+from dateutil.tz import tz
+
 from django.shortcuts import render, redirect, get_object_or_404
+from requests.auth import HTTPBasicAuth
+
 from .models import StudentProject
+from datetime import datetime
 
 # commit_history_arry = array()  # TODO: Does this really need to be global?
 
@@ -57,10 +62,25 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
                 break
             kount = kount + 1
             # logger.warning("Kount is currently {0!s}".format(kount))
-            # print(kount)
-            result = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%S%z')
-            logger.warning('DATE: ' + str(result))
-            date_history.append(com2)
+            print(com2)
+            utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%S%z')
+            from_zone = tz.tzutc()
+            to_zone = tz.tzlocal()
+            # Tell the datetime object that it's in UTC time zone since
+            # datetime objects are 'naive' by default
+            utc = utc.replace(tzinfo=from_zone)
+
+            # Convert time zone
+            central = utc.astimezone(to_zone)
+            commit_date = central.strftime('%a, %d %b %Y %I:%M%p')
+            logger.warning('DATE: ' + str(commit_date))
+            filtered_list = {
+                'commit_user': com2.commit.author.name,
+                'commit_url': com2.html_url,
+                'commit_date': commit_date,
+                'commit_msg': com2.commit.message
+            }
+            date_history.append(filtered_list)
 
     return date_history
 
@@ -74,14 +94,26 @@ def get_commit_history(repo_uri):
 def refresh_history(request):
     repo_activity = []
     # iterate all the URLs in the database and fetch commit history for each project
-    repo_projects = StudentProject.objects.all()
+    # repo_projects = StudentProject.objects.all()
+    repo_projects = StudentProject.objects.filter(project_name='Passion')
     # Iterate through list and fetch commit history
     # for proj in repo_projects:
     onlyone = True
     for project in repo_projects:
         print(project.project_url)
+        print("FETCHING COMMITS")
+        # aresp = requests.get('https://api.github.com/user', auth=HTTPBasicAuth('kevin-codecrew', 'F1sh2B0ne'))
+        # if aresp.status_code == 200:
+        print('SUCCESSFUL AUTH')
         all_commits = requests.get(project.project_url)
-        repo_activity.append(json.loads(all_commits.text))
+        if all_commits.status_code == 200:
+            print('Success!')
+            repo_activity.append(json.loads(all_commits.text))
+        else:
+            print('Not Found.'+str(all_commits.status_code))
+        # else:
+        #     print("FAILED AUTH" + str(aresp.status_code))
+
         if onlyone:
             break
     return repo_activity
