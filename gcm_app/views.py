@@ -1,17 +1,16 @@
 import json
 import logging
-from array import array
-from datetime import datetime
-from typing import List, Any
+
 
 import requests
-from dateutil.tz import tz
+
 
 from django.shortcuts import render, redirect, get_object_or_404
 from requests.auth import HTTPBasicAuth
 
 from .models import StudentProject
-from datetime import datetime
+from datetime import *
+from dateutil.tz import *
 
 # commit_history_arry = array()  # TODO: Does this really need to be global?
 
@@ -63,9 +62,9 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
             kount = kount + 1
             # logger.warning("Kount is currently {0!s}".format(kount))
             print(com2)
-            utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%S%z')
-            from_zone = tz.tzutc()
-            to_zone = tz.tzlocal()
+            utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%Sz')
+            from_zone = tzutc()
+            to_zone = tzlocal()
             # Tell the datetime object that it's in UTC time zone since
             # datetime objects are 'naive' by default
             utc = utc.replace(tzinfo=from_zone)
@@ -75,10 +74,10 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
             commit_date = central.strftime('%a, %d %b %Y %I:%M%p')
             logger.warning('DATE: ' + str(commit_date))
             filtered_list = {
-                'commit_user': com2.commit.author.name,
-                'commit_url': com2.html_url,
+                'commit_user': com2['commit']['author']['name'],
+                'commit_url': com2['html_url'],
                 'commit_date': commit_date,
-                'commit_msg': com2.commit.message
+                'commit_msg': com2['commit']['message']
             }
             date_history.append(filtered_list)
 
