@@ -72,7 +72,7 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
             # Convert time zone
             central = utc.astimezone(to_zone)
             commit_date = central.strftime('%a, %d %b %Y %I:%M%p')
-            logger.warning('DATE: ' + str(commit_date))
+            # logger.warning('DATE: ' + str(commit_date))
             filtered_list = {
                 'commit_user': com2['commit']['author']['name'],
                 'commit_url': com2['html_url'],
