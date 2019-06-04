@@ -10,7 +10,7 @@
         <h3>{{ com.commit_user }}</h3>
         {% set last_student = com.commit_user %}
     {% endif %}
-<p>{{ com.commit_url | regex1:"(?:https://api.github.com/repos/)(.*)(?:/commits)"}}</p>
+<p>{{ com.commit_url | regex1:"(?:https://github.com/)(?:.*?/)(.*)(?:/commit)"}}</p>
 <p>{{ com.commit_date }}</p>
 <a target="_blank" href="{{ com.commit_url }}">
     {{ com.commit_msg }}

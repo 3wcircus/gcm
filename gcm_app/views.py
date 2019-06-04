@@ -61,7 +61,7 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
                 break
             kount = kount + 1
             # logger.warning("Kount is currently {0!s}".format(kount))
-            print(com2)
+            # print(com2)
             utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%Sz')
             from_zone = tzutc()
             to_zone = tzlocal()
@@ -97,19 +97,20 @@ def refresh_history(request):
     repo_projects = StudentProject.objects.filter(project_name='Passion')
     # Iterate through list and fetch commit history
     # for proj in repo_projects:
-    onlyone = True
+    onlyone = False
+    logger.debug('Fetching commit history...')
     for project in repo_projects:
-        print(project.project_url)
-        print("FETCHING COMMITS")
+        # print(project.project_url)
+        # print("FETCHING COMMITS")
         # aresp = requests.get('https://api.github.com/user', auth=HTTPBasicAuth('kevin-codecrew', 'F1sh2B0ne'))
         # if aresp.status_code == 200:
-        print('SUCCESSFUL AUTH')
-        all_commits = requests.get(project.project_url)
+        # print('SUCCESSFUL AUTH')
+        all_commits = requests.get(project.project_url, auth=('kevin-codecrew', 'F1sh@B0ne'))
         if all_commits.status_code == 200:
-            print('Success!')
+            # print('Success!')
             repo_activity.append(json.loads(all_commits.text))
         else:
-            print('Not Found.'+str(all_commits.status_code))
+            print('Not Found. '+str(all_commits.status_code))
         # else:
         #     print("FAILED AUTH" + str(aresp.status_code))
 
