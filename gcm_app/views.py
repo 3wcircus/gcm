@@ -60,12 +60,10 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
             if kount > 3:
                 break
             kount = kount + 1
-            # logger.warning("Kount is currently {0!s}".format(kount))
-            # print(com2)
             utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%Sz')
             from_zone = tzutc()
             # to_zone = tzlocal()
-            to_zone = pytz.timezone('US/Eastern')
+            to_zone = pytz.timezone('America/Chicago')
             # Tell the datetime object that it's in UTC time zone since
             # datetime objects are 'naive' by default
             utc = utc.replace(tzinfo=from_zone)
@@ -102,18 +100,13 @@ def refresh_history(request):
     logger.debug('Fetching commit history...')
     for project in repo_projects:
         # print(project.project_url)
-        # print("FETCHING COMMITS")
-        # aresp = requests.get('https://api.github.com/user', auth=HTTPBasicAuth('kevin-codecrew', 'F1sh2B0ne'))
-        # if aresp.status_code == 200:
-        # print('SUCCESSFUL AUTH')
+
         all_commits = requests.get(project.project_url, auth=('kevin-codecrew', 'F1sh@B0ne'))
         if all_commits.status_code == 200:
             # print('Success!')
             repo_activity.append(json.loads(all_commits.text))
         else:
             print('Not Found. '+str(all_commits.status_code))
-        # else:
-        #     print("FAILED AUTH" + str(aresp.status_code))
 
         if onlyone:
             break
