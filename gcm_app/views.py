@@ -143,7 +143,7 @@ def refresh_history(request, cfilter):
 
 
 def home(request):
-    recent_commits = query_commit_history_by_date(refresh_history(request,0), "", "")
+    recent_commits = refresh_history(request, 0)
     context = {'commit_history': recent_commits}
     return render(request, 'gcm_app/index.html', context)
 
