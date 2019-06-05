@@ -1,0 +1,24 @@
+{% extends "gcm_app/base.html" %}
+{% load cs_custom %}
+{% block title %} Commit History {% endblock %}
+
+{% block content %}
+{#    <script>#}
+{#        let master_list = {{ commit_history }};#}
+{#        alert(master_list);#}
+{#    </script>#}
+    {% set last_student = "" %}
+    {% set last_repo = "" %}
+    {% for com in commit_history %}
+        {% if last_student != com.commit_user %}
+            <h3>{{ com.commit_user }}</h3>
+            {% set last_student = com.commit_user %}
+        {% endif %}
+        <h5>{{ com.commit_url | regex1:"(?:https://github.com/)(?:.*?/)(.*)(?:/commit)" }}</h5>
+        <p>{{ com.commit_date }}</p>
+        <a target="_blank" href="{{ com.commit_url }}">
+            {{ com.commit_msg }}
+        </a>
+        <hr/>
+    {% endfor %}
+{% endblock content %}

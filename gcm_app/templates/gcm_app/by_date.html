@@ -5,19 +5,24 @@
 {% block content %}
 
 {% set last_student = "" %}
+{% set last_repo = "" %}
 {% for com in commit_history %}
+{#    {% set this_repo =  com.commit_url | regex1:"(?:https://github.com/)(?:.*?/)(.*)(?:/commit)" %}#}
     {% if last_student != com.commit_user %}
         <h3>{{ com.commit_user }}</h3>
         {% set last_student = com.commit_user %}
+{#        {% set last_repo = this_repo %}#}
     {% endif %}
-<p>{{ com.commit_url | regex1:"(?:https://github.com/)(?:.*?/)(.*)(?:/commit)"}}</p>
-<p>{{ com.commit_date }}</p>
-<a target="_blank" href="{{ com.commit_url }}">
-    {{ com.commit_msg }}
-</a>
-
-
-<hr/>
+{#    {% if last_repo != this_repo %}#}
+{#        <hr/>#}
+{#        {%  set last_repo = this_repo %}#}
+{#    {% endif %}#}
+    <h5>{{ com.commit_url | regex1:"(?:https://github.com/)(?:.*?/)(.*)(?:/commit)" }}</h5>
+    <p>{{ com.commit_date }}</p>
+    <a target="_blank" href="{{ com.commit_url }}">
+        {{ com.commit_msg }}
+    </a>
+    <hr/>
 {% endfor %}
 
 

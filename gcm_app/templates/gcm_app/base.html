@@ -19,7 +19,7 @@
 <body>
 <script type="application/javascript">
     function search_option(opt) {
-        console.log(opt.value);
+        console.log('Search Option Changed: '+ opt.value);
     }
 </script>
 <div class="wrapper">
@@ -41,19 +41,21 @@
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-<!--            <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--                <ul class="navbar-nav">-->
-<!--                    <li class="navbar-right">-->
-<!--                        <form role="form">-->
-<!--{#                            TODO: Actually implement these search options#}-->
-<!--                            <label class="radio-inline"><input type="radio" name="gr" value="0"-->
-<!--                                                               onchange="search_option(this)" checked>Student</label>-->
-<!--                            <label class="radio-inline"><input type="radio" name="gr" value="1"-->
-<!--                                                               onchange="search_option(this)">Project</label>-->
-<!--                        </form>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </div>-->
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="navbar-right">
+                                    <form role="form">
+            {#                            TODO: Actually implement these search options--> #}
+                                       <label class="radio-inline"><input type="radio" name="gr" value="0"
+                                                                           onchange="search_option(this)" checked> Passion Project</label>
+                                        <label class="radio-inline"><input type="radio" name="gr" value="1"
+                                                                           onchange="search_option(this)"> Dev Portfolio</label>
+                                        <label class="radio-inline"><input type="radio" name="gr" value="2"
+                                                                           onchange="search_option(this)"> All Projects</label>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
 <!--            <div class="form-group pull_right">-->
 <!--{#                TODO: Actually implement search#}-->
 <!--                <input type="text" class="navbar-right form-control" placeholder="search term">-->

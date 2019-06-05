@@ -4,21 +4,16 @@ import logging
 import pytz
 import requests
 
-
 from django.shortcuts import render, redirect, get_object_or_404
-from requests.auth import HTTPBasicAuth
 
 from .models import StudentProject
 from datetime import *
 from dateutil.tz import *
 
-# commit_history_arry = array()  # TODO: Does this really need to be global?
-
+# Setup logging
 logger = logging.getLogger(__name__)
+# FIXME: logging levels do not seem 2 b working
 logger.setLevel(logging.DEBUG)
-
-
-# student_commit_history = []  # This will hold all the commit information fetch at init and refresh
 
 
 # Scratch view just used for testing crap
@@ -62,7 +57,6 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
             kount = kount + 1
             utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%Sz')
             from_zone = tzutc()
-            # to_zone = tzlocal()
             to_zone = pytz.timezone('America/Chicago')
             # Tell the datetime object that it's in UTC time zone since
             # datetime objects are 'naive' by default
@@ -83,30 +77,34 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
     return date_history
 
 
+# TODO: Use this or remove it
 def get_commit_history(repo_uri):
     repo_history = []
 
     return repo_history
 
 
+# This function will refresh the full commit history of all repository entries in the cfg database
 def refresh_history(request):
     repo_activity = []
+
+    # TODO: Add extra divider between different projects
     # iterate all the URLs in the database and fetch commit history for each project
-    # repo_projects = StudentProject.objects.all()
-    repo_projects = StudentProject.objects.filter(project_name='Passion')
+    # if proj_type and proj_type != "":
+    #     repo_projects = StudentProject.objects.filter(project_name='Passion')
+    # else:
+    repo_projects = StudentProject.objects.all().order_by('project_student_name', 'project_name')
+
     # Iterate through list and fetch commit history
-    # for proj in repo_projects:
-    onlyone = False
+    onlyone = False  # debug flag to only return one result
     logger.debug('Fetching commit history...')
     for project in repo_projects:
         # print(project.project_url)
-
         all_commits = requests.get(project.project_url, auth=('kevin-codecrew', 'F1sh@B0ne'))
         if all_commits.status_code == 200:
-            # print('Success!')
             repo_activity.append(json.loads(all_commits.text))
         else:
-            print('Not Found. '+str(all_commits.status_code))
+            print('Not Found. ' + str(all_commits.status_code))
 
         if onlyone:
             break
@@ -116,4 +114,10 @@ def refresh_history(request):
 def home(request):
     recent_commits = query_commit_history_by_date(refresh_history(request), "", "")
     context = {'commit_history': recent_commits}
-    return render(request, 'gcm_app/by_date.html', context)
+    return render(request, 'gcm_app/index.html', context)
+
+
+def index(request):
+    recent_commits = query_commit_history_by_date(refresh_history(request), "", "")
+    context = {'commit_history': recent_commits}
+    return render(request, 'gcm_app/index.html', context)
