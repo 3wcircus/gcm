@@ -65,7 +65,7 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
             utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%Sz')
             from_zone = tzutc()
             # to_zone = tzlocal()
-            to_zone = pytz.timezone('US/Central')
+            to_zone = pytz.timezone('US/Eastern')
             # Tell the datetime object that it's in UTC time zone since
             # datetime objects are 'naive' by default
             utc = utc.replace(tzinfo=from_zone)
