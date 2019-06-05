@@ -85,30 +85,61 @@ def get_commit_history(repo_uri):
 
 
 # This function will refresh the full commit history of all repository entries in the cfg database
-def refresh_history(request):
+def refresh_history(request, cfilter):
     repo_activity = []
-
-    # TODO: Add extra divider between different projects
-    # iterate all the URLs in the database and fetch commit history for each project
-    # if proj_type and proj_type != "":
-    #     repo_projects = StudentProject.objects.filter(project_name='Passion')
-    # else:
-    repo_projects = StudentProject.objects.all().order_by('project_student_name', 'project_name')
+    last_three_commits = []
+    if cfilter == 0:
+        repo_projects_raw = StudentProject.objects.all().order_by('project_student_name', 'project_name')
+    elif cfilter == 1:
+        repo_projects_raw = StudentProject.objects.filter(project_name='Passion').order_by('project_student_name',
+                                                                                           'project_name')
+    else:
+        repo_projects_raw = StudentProject.objects.filter(project_name='Portfolio').order_by('project_student_name',
+                                                                                             'project_name')
 
     # Iterate through list and fetch commit history
     onlyone = False  # debug flag to only return one result
     logger.debug('Fetching commit history...')
-    for project in repo_projects:
-        # print(project.project_url)
+    print("number of projects: " + str(len(repo_projects_raw)))
+    for project in repo_projects_raw:
+        repo_activity = []
+        print(project.project_url)
         all_commits = requests.get(project.project_url, auth=('kevin-codecrew', 'F1sh@B0ne'))
         if all_commits.status_code == 200:
             repo_activity.append(json.loads(all_commits.text))
         else:
             print('Not Found. ' + str(all_commits.status_code))
 
-        if onlyone:
-            break
-    return repo_activity
+        # if onlyone:
+        #     break
+
+        for com in repo_activity:
+            kount = 1
+            for com2 in com:
+                if kount > 3:
+                    break
+                kount = kount + 1
+                utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%Sz')
+                from_zone = tzutc()
+                to_zone = pytz.timezone('America/Chicago')
+                # Tell the datetime object that it's in UTC time zone since
+                # datetime objects are 'naive' by default
+                utc = utc.replace(tzinfo=from_zone)
+
+                # Convert time zone
+                central = utc.astimezone(to_zone)
+                commit_date = central.strftime('%a, %d %b %Y %I:%M%p')
+                # logger.warning('DATE: ' + str(commit_date))
+                filtered_list = {
+                    # 'commit_user': com2['commit']['author']['name'],
+                    'commit_user': project.project_student_name,
+                    'commit_url': com2['html_url'],
+                    'commit_date': commit_date,
+                    'commit_msg': com2['commit']['message']
+                }
+                last_three_commits.append(filtered_list)
+                print(filtered_list)
+    return last_three_commits
 
 
 def home(request):
@@ -118,6 +149,6 @@ def home(request):
 
 
 def index(request):
-    recent_commits = query_commit_history_by_date(refresh_history(request), "", "")
+    recent_commits = refresh_history(request, 0)
     context = {'commit_history': recent_commits}
     return render(request, 'gcm_app/index.html', context)
