@@ -86,16 +86,28 @@ def get_commit_history(repo_uri):
 
 # This function will refresh the full commit history of all repository entries in the cfg database
 def refresh_history(request, cfilter):
+    print('Search Filter: '+str(cfilter))
+
     repo_activity = []
     last_three_commits = []
     if cfilter == 0:
+        print("No search filter")
         repo_projects_raw = StudentProject.objects.all().order_by('project_student_name', 'project_name')
     elif cfilter == 1:
+        print('search filter = 1')
         repo_projects_raw = StudentProject.objects.filter(project_name='Passion').order_by('project_student_name',
                                                                                            'project_name')
-    else:
+    elif cfilter == 2:
+        print('search filter = 2')
         repo_projects_raw = StudentProject.objects.filter(project_name='Portfolio').order_by('project_student_name',
                                                                                              'project_name')
+    elif cfilter == 3:
+        print('search filter = 3')
+        repo_projects_raw = StudentProject.objects.filter(project_name='Other').order_by('project_student_name',
+                                                                                            'project_name')
+    else:
+        print('Invalid filter option: ' + str(cfilter))
+        repo_projects_raw = StudentProject.objects.all().order_by('project_student_name', 'project_name')
 
     # Iterate through list and fetch commit history
     onlyone = False  # debug flag to only return one result
@@ -138,7 +150,7 @@ def refresh_history(request, cfilter):
                     'commit_msg': com2['commit']['message']
                 }
                 last_three_commits.append(filtered_list)
-                print(filtered_list)
+                # print(filtered_list)
     return last_three_commits
 
 
@@ -150,5 +162,11 @@ def home(request):
 
 def index(request):
     recent_commits = refresh_history(request, 0)
+    context = {'commit_history': recent_commits}
+    return render(request, 'gcm_app/index.html', context)
+
+
+def sindex(request, soption):
+    recent_commits = refresh_history(request, soption)
     context = {'commit_history': recent_commits}
     return render(request, 'gcm_app/index.html', context)

@@ -6,7 +6,7 @@ class StudentProject(models.Model):
     PROJECT_TYPES = (
         ('Portfolio', 'Dev Portfolio'),
         ('Passion', 'Passion Project'),
-        ('Other', 'Other'),
+        ('Other', 'Other Project'),
     )
     project_student_name = models.CharField(max_length=200)
     project_name = models.CharField(max_length=200, choices=PROJECT_TYPES)
