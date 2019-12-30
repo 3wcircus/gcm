@@ -90,19 +90,24 @@ def refresh_history(request, cfilter):
 
     repo_activity = []
     last_three_commits = []
+    cfilter_type='' # Hold string representation of filter type
     if cfilter == 0:
         print("No search filter")
+        cfilter_type = 'All'
         repo_projects_raw = StudentProject.objects.all().order_by('project_student_name', 'project_name')
     elif cfilter == 1:
         print('search filter = 1')
+        cfilter_type = 'Passion Project'
         repo_projects_raw = StudentProject.objects.filter(project_name='Passion').order_by('project_student_name',
                                                                                            'project_name')
     elif cfilter == 2:
         print('search filter = 2')
+        cfilter_type = 'Dev Portfolio Project'
         repo_projects_raw = StudentProject.objects.filter(project_name='Portfolio').order_by('project_student_name',
                                                                                              'project_name')
     elif cfilter == 3:
         print('search filter = 3')
+        cfilter_type = 'Other Project'
         repo_projects_raw = StudentProject.objects.filter(project_name='Other').order_by('project_student_name',
                                                                                             'project_name')
     else:
@@ -147,7 +152,8 @@ def refresh_history(request, cfilter):
                     'commit_user': project.project_student_name,
                     'commit_url': com2['html_url'],
                     'commit_date': commit_date,
-                    'commit_msg': com2['commit']['message']
+                    'commit_msg': com2['commit']['message'],
+                    'commit_type': cfilter_type
                 }
                 last_three_commits.append(filtered_list)
                 # print(filtered_list)
