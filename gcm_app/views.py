@@ -121,6 +121,7 @@ def refresh_history(request, cfilter):
     for project in repo_projects_raw:
         repo_activity = []
         print(project.project_url)
+        # FIXME: This shouldnt be here
         all_commits = requests.get(project.project_url, auth=('kevin-codecrew', 'F1sh@B0ne'))
         if all_commits.status_code == 200:
             repo_activity.append(json.loads(all_commits.text))
