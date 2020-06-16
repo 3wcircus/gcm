@@ -3,10 +3,6 @@
 {% block title %} Commit History {% endblock %}
 
 {% block content %}
-{#    <script>#}
-{#        let master_list = {{ commit_history }};#}
-{#        alert(master_list);#}
-{#    </script>#}
     {% set last_student = "" %}
     {% set last_repo = "" %}
     {% for com in commit_history %}

@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 # FIXME: logging levels do not seem 2 b working
 logger.setLevel(logging.DEBUG)
 
+last_number_of_commits = 5
 
 # Scratch view just used for testing crap
 def test(request):
@@ -51,10 +52,12 @@ def query_commit_history_by_student(commit_list, student_id):
 # TODO: Actually filter by dates in commit messages. Atm just returns
 def query_commit_history_by_date(commit_list, startdate, enddate):
     date_history = []
+
     for com in commit_list:
         kount = 1
+        print('Get most recent commits')
         for com2 in com:
-            if kount > 3: # FIXME: Hardcoded to just list the last 3 commits
+            if kount > last_number_of_commits: # FIXME: Hardcoded to just list the last n commits
                 break
             kount = kount + 1
             utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%Sz')
@@ -130,13 +133,11 @@ def refresh_history(request, cfilter):
         else:
             print('Not Found. ' + str(all_commits.status_code))
 
-        # if onlyone:
-        #     break
 
         for com in repo_activity:
             kount = 1
             for com2 in com:
-                if kount > 3:
+                if kount > last_number_of_commits:
                     break
                 kount = kount + 1
                 utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%Sz')
