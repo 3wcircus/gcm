@@ -4,6 +4,7 @@ import logging
 import datetime as datetime
 import pytz
 import requests
+from dateutil.tz.tz import tzutc
 
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -53,7 +54,7 @@ def query_commit_history_by_date(commit_list, startdate, enddate):
     for com in commit_list:
         kount = 1
         for com2 in com:
-            if kount > 3:
+            if kount > 3: # FIXME: Hardcoded to just list the last 3 commits
                 break
             kount = kount + 1
             utc = datetime.strptime(com2['commit']['author']['date'], '%Y-%m-%dT%H:%M:%Sz')
