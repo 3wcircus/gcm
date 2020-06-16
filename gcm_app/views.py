@@ -142,6 +142,7 @@ def refresh_history(request, cfilter):
     return last_three_commits
 
 
+# // Basically same as index but keeping for backward compatibility of routes
 def home(request):
     recent_commits = refresh_history(request, 0)
     context = {'commit_history': recent_commits}
