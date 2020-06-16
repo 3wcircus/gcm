@@ -1,0 +1,32 @@
+
+.jumbotron {
+    height: 220px;
+}
+
+/*Extra Grid Styling*/
+img {
+    /*padding:1px;*/
+    border:1px solid #021a40;
+    background-color:#ff0;
+}
+
+body {
+    margin: 40px;
+}
+
+form {
+    padding: 10px 15px;
+}
+
+.header,
+.footer {
+    background-color: burlywood;
+    font-size: 150%;
+}
+
+
+
+.box {
+    border-radius: 5px;
+    padding: 10px;
+}

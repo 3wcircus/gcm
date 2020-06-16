@@ -12,6 +12,7 @@
     {% for com in commit_history %}
         {% if last_student != com.commit_user %}
             <h3>{{ com.commit_user }}</h3>
+            <small>{{ com.commit_type }}</small>
             {% set last_student = com.commit_user %}
         {% endif %}
         <h5>{{ com.commit_url | regex1:"(?:https://github.com/)(?:.*?/)(.*)(?:/commit)" }}</h5>

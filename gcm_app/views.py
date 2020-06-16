@@ -86,16 +86,33 @@ def get_commit_history(repo_uri):
 
 # This function will refresh the full commit history of all repository entries in the cfg database
 def refresh_history(request, cfilter):
+    print('Search Filter: '+str(cfilter))
+
     repo_activity = []
     last_three_commits = []
+    cfilter_type='' # Hold string representation of filter type
     if cfilter == 0:
+        print("No search filter")
+        cfilter_type = 'All'
         repo_projects_raw = StudentProject.objects.all().order_by('project_student_name', 'project_name')
     elif cfilter == 1:
+        print('search filter = 1')
+        cfilter_type = 'Passion Project'
         repo_projects_raw = StudentProject.objects.filter(project_name='Passion').order_by('project_student_name',
                                                                                            'project_name')
-    else:
+    elif cfilter == 2:
+        print('search filter = 2')
+        cfilter_type = 'Dev Portfolio Project'
         repo_projects_raw = StudentProject.objects.filter(project_name='Portfolio').order_by('project_student_name',
                                                                                              'project_name')
+    elif cfilter == 3:
+        print('search filter = 3')
+        cfilter_type = 'Other Project'
+        repo_projects_raw = StudentProject.objects.filter(project_name='Other').order_by('project_student_name',
+                                                                                            'project_name')
+    else:
+        print('Invalid filter option: ' + str(cfilter))
+        repo_projects_raw = StudentProject.objects.all().order_by('project_student_name', 'project_name')
 
     # Iterate through list and fetch commit history
     onlyone = False  # debug flag to only return one result
@@ -104,6 +121,7 @@ def refresh_history(request, cfilter):
     for project in repo_projects_raw:
         repo_activity = []
         print(project.project_url)
+        # FIXME: This shouldnt be here
         all_commits = requests.get(project.project_url, auth=('kevin-codecrew', 'F1sh@B0ne'))
         if all_commits.status_code == 200:
             repo_activity.append(json.loads(all_commits.text))
@@ -135,10 +153,11 @@ def refresh_history(request, cfilter):
                     'commit_user': project.project_student_name,
                     'commit_url': com2['html_url'],
                     'commit_date': commit_date,
-                    'commit_msg': com2['commit']['message']
+                    'commit_msg': com2['commit']['message'],
+                    'commit_type': cfilter_type
                 }
                 last_three_commits.append(filtered_list)
-                print(filtered_list)
+                # print(filtered_list)
     return last_three_commits
 
 
@@ -151,5 +170,11 @@ def home(request):
 
 def index(request):
     recent_commits = refresh_history(request, 0)
+    context = {'commit_history': recent_commits}
+    return render(request, 'gcm_app/index.html', context)
+
+
+def sindex(request, soption):
+    recent_commits = refresh_history(request, soption)
     context = {'commit_history': recent_commits}
     return render(request, 'gcm_app/index.html', context)

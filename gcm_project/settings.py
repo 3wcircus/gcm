@@ -24,7 +24,7 @@ SECRET_KEY = 'r(&2p1&9k!l&lh-0lo$@7a3qm5wt0=#5a=(@vz@!no!hf#&g_v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'gcm.3wcircus.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'gcm.3wcircus.com','206.81.4.116']
 
 # Application definition
 

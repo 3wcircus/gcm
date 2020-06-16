@@ -20,6 +20,18 @@
 <script type="application/javascript">
     function search_option(opt) {
         console.log('Search Option Changed: '+ opt.value);
+        switch (parseInt(opt.value)) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                window.location.replace('/'+opt.value);
+                break;
+            default:
+                console.log("No options matched!");
+                break;
+        }
+
     }
 </script>
 <div class="wrapper">
@@ -45,17 +57,22 @@
                             <ul class="navbar-nav">
                                 <li class="navbar-right">
                                     <form role="form">
-            {#                            TODO: Actually implement these search options--> #}
+
                                         <label class="radio-inline"><input type="radio" name="gr" value="0"
-                                                                           onchange="search_option(this)" checked> All Projects</label>
+                                                                           onchange="search_option(this)" > All Projects |</label>
                                        <label class="radio-inline"><input type="radio" name="gr" value="1"
-                                                                           onchange="search_option(this)" > Passion Project</label>
+                                                                           onchange="search_option(this)" > Passion Project |</label>
                                         <label class="radio-inline"><input type="radio" name="gr" value="2"
-                                                                           onchange="search_option(this)"> Dev Portfolio</label>
+                                                                           onchange="search_option(this)"> Dev Portfolio Project |</label>
+                                        <label class="radio-inline"><input type="radio" name="gr" value="3"
+                                                                           onchange="search_option(this)"> Other Projects</label>
                                     </form>
                                 </li>
                             </ul>
                         </div>
+            <div class="pull_left">
+                <h3>Filter Commit History</h3>
+            </div>
 <!--            <div class="form-group pull_right">-->
 <!--{#                TODO: Actually implement search#}-->
 <!--                <input type="text" class="navbar-right form-control" placeholder="search term">-->
