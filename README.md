@@ -1,5 +1,5 @@
-# gcm
-Github Commit Monitor using Django
+# Github Commit Monitor using Django
+
 
 <b>NOTE: Uses the old version of GitHub API</b>
 
