@@ -23,9 +23,6 @@ last_number_of_commits = 5
 def test(request):
     logger.info('Index')
     # Get commit history
-    # remote_repo = 'https://api.github.com/repos/tdude0175/WebPortfolio-ThomasPBrown/commits'
-    # remote_repo = 'https://api.github.com/repos/autumn-ragland/portfolio/commits'
-    # commit_history = requests.get(remote_repo)
     commit_history_arry = refresh_history(request)
     context = {'commit_history': commit_history_arry}
 
